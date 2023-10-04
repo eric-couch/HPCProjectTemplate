@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HPCProjectTemplate.Server", "HPCProjectTemplate\Server\HPCProjectTemplate.Server.csproj", "{840A67BC-BCF9-46D1-B190-1B26FEDEFB9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HPCProjectTemplate.Server", "HPCProjectTemplate\Server\HPCProjectTemplate.Server.csproj", "{840A67BC-BCF9-46D1-B190-1B26FEDEFB9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HPCProjectTemplate.Client", "HPCProjectTemplate\Client\HPCProjectTemplate.Client.csproj", "{DFDF2AA1-63D7-4914-94CC-15D0AB9A3D90}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HPCProjectTemplate.Client", "HPCProjectTemplate\Client\HPCProjectTemplate.Client.csproj", "{DFDF2AA1-63D7-4914-94CC-15D0AB9A3D90}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HPCProjectTemplate.Shared", "HPCProjectTemplate\Shared\HPCProjectTemplate.Shared.csproj", "{CB81084E-EE5E-4191-B53A-CB424F5D9914}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HPCProjectTemplate.Shared", "HPCProjectTemplate\Shared\HPCProjectTemplate.Shared.csproj", "{CB81084E-EE5E-4191-B53A-CB424F5D9914}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

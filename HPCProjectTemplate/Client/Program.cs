@@ -11,6 +11,7 @@ builder.Services.AddHttpClient("HPCProjectTemplate.ServerAPI", client => client.
     .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
 // Supply HttpClient instances that include access tokens when making requests to the server project
+// scoped, transient, singleton
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("HPCProjectTemplate.ServerAPI"));
 
 builder.Services.AddApiAuthorization();
