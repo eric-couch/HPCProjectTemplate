@@ -1,4 +1,5 @@
-﻿using NuGet.Protocol.Core.Types;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HPCProjectTemplate.Server.Models;
 

@@ -1,0 +1,26 @@
+﻿@page "/cascadingparams"
+
+<h3>CascadingParams</h3>
+
+<CascadingValue Value="@TheAnswer">
+    <FooComponent @ref="foocomponent" MeaningOfLifeChanged="UpdateMeaning" />
+</CascadingValue>
+
+<p>The answer is @TheOtherAnswer</p>
+
+@code {
+    public FooComponent foocomponent;
+
+    public int TheAnswer { get; set; } = 51;
+    public int TheOtherAnswer { get; set; } = 0;
+
+    private void someMethod()
+    {
+        foocomponent.MeaningOfLife = 99;
+    }
+
+    private void UpdateMeaning(int newMeaning)
+    {
+        TheOtherAnswer++;
+    }
+}

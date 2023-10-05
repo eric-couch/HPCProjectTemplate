@@ -1,0 +1,22 @@
+﻿@page "/EventHandler"
+
+<h3>@value</h3>
+<input type="text" placeholder="enter your text" @onchange="onChange" />
+
+
+
+@code {
+    public string value { get; set; } = String.Empty;
+    public string message { get; set; }
+
+    private void onChange(ChangeEventArgs args)
+    {
+        value = (string)args.Value!;
+    }
+
+    private void onClick(MouseEventArgs args)
+    {
+        message = $"Mouse coordinates: {args.ClientX} {args.ClientY}";
+    }
+
+}

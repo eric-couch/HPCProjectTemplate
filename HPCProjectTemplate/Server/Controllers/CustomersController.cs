@@ -1,23 +1,37 @@
 ﻿using HPCProjectTemplate.Server.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using HPCProjectTemplate.Shared;
+using HPCProjectTemplate.Server.Models;
 
 namespace HPCProjectTemplate.Server.Controllers;
-using HPCProjectTemplate.Server.Models;
+
 
 public class CustomersController : Controller
 {
     private readonly ApplicationDbContext _context;
+    private readonly ILogger<CustomersController> _logger;
 
-    public CustomersController(ApplicationDbContext dbContext)
+    public CustomersController(ApplicationDbContext dbContext, ILogger<CustomersController> logger)
     {
         _context = dbContext;
+        _logger = logger;
+
     }
     [HttpGet]
     [Route("api/customers")]
     public async Task<List<Customer>> Index()
     {
-        return await _context.Customers.ToListAsync();
+        try
+        {
+            _logger.LogInformation("CustomersController.Index() called");
+            return await _context.Customers.ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogInformation($"Error {ex.Message}");
+            return new List<Customer>();
+        }
     }
 
     [HttpGet]

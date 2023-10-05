@@ -1,0 +1,11 @@
+﻿@page "/EventHandlerLambda"
+
+<h3>@heading</h3>
+<p>
+    <button @onclick="@(e => heading = "New Heading!")">Update Heading</button>
+</p>
+
+@code {
+    public string heading { get; set; } = "initial heading";
+
+}

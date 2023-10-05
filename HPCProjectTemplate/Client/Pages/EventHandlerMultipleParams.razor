@@ -1,0 +1,21 @@
+﻿@page "/EventHandlerMultipleParams"
+
+<h3>@heading</h3>
+
+@for (var i = 0; i < 7; i++)
+{
+    var buttonNumber = i;
+    <p>
+        <button @onclick="@(e => UpdateHeading(e, buttonNumber))">Update Heading #@buttonNumber</button>
+    </p>
+}
+
+
+@code {
+    public string heading { get; set; } = "initial heading";
+
+    private void UpdateHeading(MouseEventArgs args, int buttonNumber)
+    {
+        heading = $"Selected #{buttonNumber}";
+    }
+}
