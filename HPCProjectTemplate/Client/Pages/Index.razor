@@ -6,7 +6,7 @@
     <ul>
     @foreach (HPCProjectTemplate.Shared.OMDBMovieResponse movie in movies)
     {
-        <li>@movie.Title (@movie.Year) <br /> @movie.Actors.Replace(",", " | ") </li>
+        <li>@movie.Title (@movie.Year) <br /> @movie.Actors.Replace(",", " | ") <br /> <img src="@movie.Poster" width="150" /> </li>
     }
     </ul>
 }
