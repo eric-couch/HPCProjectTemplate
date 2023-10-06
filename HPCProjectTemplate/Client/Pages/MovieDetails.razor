@@ -1,0 +1,19 @@
+﻿@using HPCProjectTemplate.Shared;
+
+@if (Movie is not null)
+{
+    <li>@Movie.Title (@Movie.Year) 
+        <br /> 
+        @Movie.Actors.Replace(",", " | ") 
+        <br /> 
+        <a href="https://www.imdb.com/title/@Movie.imdbID" target="_blank">
+        <img src="@Movie.Poster" width="75" />
+        </a>
+    </li>
+}
+
+@code {
+    [Parameter]
+    public OMDBMovieResponse? Movie { get; set; } = null;
+
+}
