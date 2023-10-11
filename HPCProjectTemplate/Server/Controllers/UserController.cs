@@ -1,5 +1,8 @@
 ﻿using HPCProjectTemplate.Server.Data;
+using HPCProjectTemplate.Server.Models;
 using HPCProjectTemplate.Shared;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks.Dataflow;
@@ -9,10 +12,12 @@ namespace HPCProjectTemplate.Server.Controllers;
 public class UserController : Controller
 {
     private readonly ApplicationDbContext _context;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public UserController(ApplicationDbContext context)
+    public UserController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
     {
         _context = context;
+        _userManager = userManager;
     }
 
     // GET: api/get-movies?userName=userName
@@ -42,5 +47,23 @@ public class UserController : Controller
                                             FavoriteMovies = u.FavoriteMovies
                                         }).FirstOrDefaultAsync(); */
         return Ok(userMovies);
+    }
+
+    [HttpPost("api/add-movie")]
+    public async Task<ActionResult> AddMovie([FromBody] Movie movie, [FromQuery(Name = "userName")] string userName)
+    {
+        //var user = await _userManager.FindByNameAsync(User.Identity.Name);
+        //if (user is null)
+        //{
+        //    return NotFound();
+        //}
+
+        var user = await (from u in _context.Users
+                          where u.UserName == userName
+                          select u).FirstOrDefaultAsync();
+        user.FavoriteMovies.Add(movie);
+        _context.SaveChanges();
+
+        return Ok();
     }
 }
