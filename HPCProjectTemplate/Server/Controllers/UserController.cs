@@ -52,12 +52,6 @@ public class UserController : Controller
     [HttpPost("api/add-movie")]
     public async Task<ActionResult> AddMovie([FromBody] Movie movie, [FromQuery(Name = "userName")] string userName)
     {
-        //var user = await _userManager.FindByNameAsync(User.Identity.Name);
-        //if (user is null)
-        //{
-        //    return NotFound();
-        //}
-
         var user = await (from u in _context.Users
                           where u.UserName == userName
                           select u).FirstOrDefaultAsync();
