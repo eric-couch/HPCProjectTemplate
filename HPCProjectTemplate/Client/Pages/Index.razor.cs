@@ -28,23 +28,12 @@ public partial class Index
         var UserAuth = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity;
         if (UserAuth is not null && UserAuth.IsAuthenticated)
         {
-            //User = await Http.GetFromJsonAsync<UserDto>($"api/get-movies?userName={UserAuth.Name}");
-            //if (User is not null)
-            //{
-            //    foreach (var movie in User.FavoriteMovies)
-            //    {
-            //        OMDBMovieResponse omdbMovie = await Http.GetFromJsonAsync<OMDBMovieResponse>($"{OMDBAPIUrl}{OMDBAPIKey}&i={movie.imdbId}");
-            //        movies.Add(omdbMovie);
-            //    }
-
-            //}
-
             DataResponse<List<OMDBMovieResponse>> dataResponse = await UserMoviesHttpRepository.GetMovies(UserAuth.Name);
             if (dataResponse.Success)
             {
                 movies = dataResponse.Data;
                 // log this
-                // show the user a message "success"
+                // show the user a message "success" - this is a toast notification
             } else
             {
                 Console.WriteLine(dataResponse.Message);
