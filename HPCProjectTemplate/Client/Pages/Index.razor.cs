@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Components;
 using HPCProjectTemplate.Shared;
 using System.Net.Http.Json;
 using HPCProjectTemplate.Client.HttpRepository;
+using HPCProjectTemplate.Shared.Wrappers;
+using System.Diagnostics;
 
 namespace HPCProjectTemplate.Client.Pages;
 
@@ -37,7 +39,18 @@ public partial class Index
 
             //}
 
-            movies = await UserMoviesHttpRepository.GetMovies(UserAuth.Name);
+            DataResponse<List<OMDBMovieResponse>> dataResponse = await UserMoviesHttpRepository.GetMovies(UserAuth.Name);
+            if (dataResponse.Success)
+            {
+                movies = dataResponse.Data;
+                // log this
+                // show the user a message "success"
+            } else
+            {
+                Console.WriteLine(dataResponse.Message);
+                Debug.WriteLine(dataResponse.Message);
+                // show the user a message "failure"
+            }
         }
         
     }

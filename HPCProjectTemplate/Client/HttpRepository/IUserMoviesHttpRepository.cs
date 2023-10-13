@@ -1,8 +1,9 @@
 ﻿using HPCProjectTemplate.Shared;
+using HPCProjectTemplate.Shared.Wrappers;
 
 namespace HPCProjectTemplate.Client.HttpRepository;
 
 public interface IUserMoviesHttpRepository
 {
-     Task<List<OMDBMovieResponse>> GetMovies(string userName);
+     Task<DataResponse<List<OMDBMovieResponse>>> GetMovies(string userName);
 }

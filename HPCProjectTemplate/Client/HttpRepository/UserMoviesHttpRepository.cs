@@ -1,4 +1,5 @@
 ﻿using HPCProjectTemplate.Shared;
+using HPCProjectTemplate.Shared.Wrappers;
 using System.Net.Http.Json;
 using System.Net;
 
@@ -15,7 +16,8 @@ public class UserMoviesHttpRepository : IUserMoviesHttpRepository
         _httpClient = httpClient;
     }
 
-    public async Task<List<OMDBMovieResponse>> GetMovies(string userName) {
+    // wrapper pattern
+    public async Task<DataResponse<List<OMDBMovieResponse>>> GetMovies(string userName) {
         try
         {
             var MovieDetails = new List<OMDBMovieResponse>();
@@ -28,11 +30,22 @@ public class UserMoviesHttpRepository : IUserMoviesHttpRepository
                     MovieDetails.Add(movieDetails);
                 }
             }
-            return MovieDetails;
+            return new DataResponse<List<OMDBMovieResponse>>()
+            {
+                Data = MovieDetails,
+                Message = "Success",
+                Success = true
+            };
         } catch (Exception e)
         {
             Console.WriteLine(e);
-            return new List<OMDBMovieResponse>();
+            return new DataResponse<List<OMDBMovieResponse>>()
+            {
+                Data = new List<OMDBMovieResponse>(),
+                Message = e.Message,
+                Success = false,
+                Errors = new Dictionary<string, string[]> { { e.Message, new string[] { e.Message } } }
+            };
         }
     }
 
