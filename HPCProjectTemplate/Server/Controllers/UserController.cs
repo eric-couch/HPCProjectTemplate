@@ -46,6 +46,10 @@ public class UserController : Controller
                                             LastName = u.LastName,
                                             FavoriteMovies = u.FavoriteMovies
                                         }).FirstOrDefaultAsync(); */
+        if (userMovies is null)
+        {
+            return NotFound();
+        }
         return Ok(userMovies);
     }
 

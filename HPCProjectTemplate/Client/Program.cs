@@ -3,6 +3,7 @@ using HPCProjectTemplate.Client.HttpRepository;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Syncfusion.Blazor;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -16,5 +17,5 @@ builder.Services.AddHttpClient("HPCProjectTemplate.ServerAPI", client => client.
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("HPCProjectTemplate.ServerAPI"));
 builder.Services.AddScoped<IUserMoviesHttpRepository, UserMoviesHttpRepository>();
 builder.Services.AddApiAuthorization();
-
+builder.Services.AddSyncfusionBlazor();
 await builder.Build().RunAsync();

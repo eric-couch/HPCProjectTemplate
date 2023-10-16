@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Components;
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Components.QuickGrid;
 using Microsoft.AspNetCore.Components.Authorization;
+using Syncfusion.Blazor.Navigations;
+using Syncfusion.Blazor.Grids;
+using Syncfusion.Blazor.Notifications;
 
 namespace HPCProjectTemplate.Client.Pages;
 
@@ -15,7 +18,15 @@ public partial class Search
     public string SearchTitle { get; set; }
     public MovieSearchResult? movieSearchResult { get; set; }
     //GridItemsProvider<MovieSearchResultItem>? gridItemsProvider;
-    IQueryable<MovieSearchResultItem>? movies { get; set; } = null;
+    //IQueryable<MovieSearchResultItem>? movies { get; set; } = null;
+    public List<MovieSearchResultItem> OMDBMovies { get; set; } = new List<MovieSearchResultItem>();
+
+    public SfGrid<MovieSearchResultItem>? MoviesGrid;
+    public SfToast ToastObj { get; set; } = null!;
+    public string selectedPoster = String.Empty;
+    public string toastContent = String.Empty;
+
+    public MovieSearchResultItem? itemSelected = null;
 
     private readonly string OMDBAPIUrl = "https://www.omdbapi.com/?apikey=";
     private readonly string OMDBAPIKey = "86c39163";
@@ -32,26 +43,45 @@ public partial class Search
         StateHasChanged();
     }
 
-    private async Task NextPage()
+    public async Task GetSelectedRecord(RowSelectEventArgs<MovieSearchResultItem> args)
     {
-        if (pageNum < totalPages)
-        {
-            pageNum++;
-
-        }
-        await GetMovies();
-        StateHasChanged();
+        var selectedMovie = await MoviesGrid.GetSelectedRecordsAsync();
+        selectedPoster = args.Data.Poster;
+        itemSelected = args.Data;
+        //await AddMovie(args.Data);
     }
 
-    private async Task PreviousPage()
+    public async Task ToolBarClickHandler(ClickEventArgs args)
     {
-        if (pageNum > 1)
+        if (args.Item.Id == "GridMovieAdd")
         {
-            pageNum--;
+            if (itemSelected is not null)
+            {
+                Movie newMovie = new Movie()
+                {
+                    imdbId = itemSelected.imdbID
+                };
+                var UserAuth = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity;
+                if (UserAuth is not null && UserAuth.IsAuthenticated)
+                {
 
+                    var res = await Http.PostAsJsonAsync<Movie>($"api/add-movie?userName={UserAuth.Name}", newMovie);
+                    if (res.IsSuccessStatusCode)
+                    {
+                        toastContent = $"Movie {itemSelected.Title} added to your list";
+                        StateHasChanged();
+                        await ToastObj.ShowAsync();
+                    }
+                    // add error handling to check status code
+                }
+            }
+            else
+            {
+                // add error handling
+            }
         }
-        await GetMovies();
-        StateHasChanged();
+            
+
     }
 
     private async Task GetMovies()
@@ -60,7 +90,9 @@ public partial class Search
 
         if (movieResult is not null)
         {
-            movies = movieResult.Search.AsQueryable();
+            //movies = movieResult.Search.AsQueryable();
+            OMDBMovies = movieResult.Search.ToList();
+
             if (Double.TryParse(movieResult.totalResults, out double total))
             {
                 totalResults = (int)total;
@@ -73,19 +105,11 @@ public partial class Search
         }
     }
 
-    private async Task AddMovie(MovieSearchResultItem movie)
+    public async Task PageClick(PagerItemClickEventArgs args)
     {
-        Movie newMovie = new Movie()
-        {
-            imdbId = movie.imdbID
-        };
-
-        var UserAuth = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity;
-        if (UserAuth is not null && UserAuth.IsAuthenticated)
-        {
-
-            await Http.PostAsJsonAsync<Movie>($"api/add-movie?userName={UserAuth.Name}", newMovie);
-        }
+        pageNum = args.CurrentPage;
+        await GetMovies();
     }
+
 
 }

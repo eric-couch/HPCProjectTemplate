@@ -19,6 +19,7 @@ public partial class Index
     public IUserMoviesHttpRepository UserMoviesHttpRepository { get; set; } = null!;
     public UserDto? User { get; set; } = null;
     public List<OMDBMovieResponse> movies { get; set; } = new List<OMDBMovieResponse>();
+    public bool isVisible = true;
 
     //private readonly string OMDBAPIUrl = "https://www.omdbapi.com/?apikey=";
     //private readonly string OMDBAPIKey = "86c39163";
@@ -41,6 +42,6 @@ public partial class Index
                 // show the user a message "failure"
             }
         }
-        
+        isVisible = false;
     }
 }
