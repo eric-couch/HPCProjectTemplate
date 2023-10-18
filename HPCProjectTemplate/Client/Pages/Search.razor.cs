@@ -1,4 +1,5 @@
 ﻿using HPCProjectTemplate.Shared;
+using HPCProjectTemplate.Shared.Wrappers;
 using Microsoft.AspNetCore.Components;
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Components.QuickGrid;
@@ -25,6 +26,7 @@ public partial class Search
     public SfToast ToastObj { get; set; } = null!;
     public string selectedPoster = String.Empty;
     public string toastContent = String.Empty;
+    public string toastCss = "e-toast-success";
 
     public MovieSearchResultItem? itemSelected = null;
 
@@ -71,13 +73,21 @@ public partial class Search
                         toastContent = $"Movie {itemSelected.Title} added to your list";
                         StateHasChanged();
                         await ToastObj.ShowAsync();
+                    } else
+                    {
+                        toastContent = $"Movie {itemSelected.Title} was not added to your list";
+                        toastCss = "e-toast-warning";
+                        StateHasChanged();
+                        await ToastObj.ShowAsync();
                     }
-                    // add error handling to check status code
                 }
             }
             else
             {
-                // add error handling
+                toastContent = $"select a movie first";
+                toastCss = "e-toast-warning";
+                StateHasChanged();
+                await ToastObj.ShowAsync();
             }
         }
             

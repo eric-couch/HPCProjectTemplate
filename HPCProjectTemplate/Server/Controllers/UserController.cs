@@ -31,15 +31,31 @@ public class UserController : Controller
         return Ok(movies);
     }
 
-    //[HttpPost("api/add-movie")]
-    //public async Task<ActionResult> AddMovie([FromBody] Movie movie, [FromQuery(Name = "userName")] string userName)
-    //{
-    //    var user = await (from u in _context.Users
-    //                      where u.UserName == userName
-    //                      select u).FirstOrDefaultAsync();
-    //    user.FavoriteMovies.Add(movie);
-    //    _context.SaveChanges();
+    [HttpPost("api/add-movie")]
+    public async Task<ActionResult> AddMovie([FromBody] Movie movie, [FromQuery(Name = "userName")] string userName)
+    {
+        var response = await _userService.AddMovie(movie, userName);
 
-    //    return Ok();
-    //}
+        if (response is not null && response.Success) 
+        {
+            return Ok(); 
+        }
+        return NotFound();
+    }
+
+    [HttpPost("api/remove-movie")]
+    public async Task<ActionResult<bool>> RemoveMovie([FromBody] Movie movie, [FromQuery(Name = "userName")] string userName)
+    {
+        try
+        {
+            var response = await _userService.RemoveMovie(movie, userName);
+            if (response is not null && response.Success)
+            {
+                return Ok();
+            }
+            return NotFound();
+        } catch (Exception ex) {
+            return NotFound();
+        }
+    }
 }

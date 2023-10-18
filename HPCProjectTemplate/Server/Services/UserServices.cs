@@ -2,9 +2,11 @@
 using HPCProjectTemplate.Server.Controllers;
 using HPCProjectTemplate.Server.Models;
 using HPCProjectTemplate.Shared;
+using HPCProjectTemplate.Shared.Wrappers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HPCProjectTemplate.Server.Services;
 
@@ -38,4 +40,35 @@ public class UserServices : IUserService
         return userMovies;
     }
 
+    public async Task<Response> AddMovie(Movie movie, String? userName)
+    {
+        try
+        {
+            var user = await (from u in _context.Users
+                              where u.UserName == userName
+                              select u).FirstOrDefaultAsync();
+            if (user is null)
+            {
+                return new Response(false, "Could not find user.");
+            }
+            user.FavoriteMovies.Add(movie);
+            _context.SaveChanges();
+            return new Response(true, $"Added movie: {movie.imdbId} ");
+        } catch (Exception ex)
+        {
+            return new Response(false, ex.Message);
+        }
+        
+
+    }
+
+    public async Task<Response> RemoveMovie(Movie movie, String? userName)
+    {
+        var movieToRemove = _context.Users.Include(u => u.FavoriteMovies)
+                            .FirstOrDefault(u =>  u.UserName == userName)
+                            .FavoriteMovies.FirstOrDefault(m => m.imdbId == movie.imdbId);
+        _context.Movies.Remove(movieToRemove);
+        _context.SaveChanges();
+        return new Response(true, $"Removed movie: {movie.imdbId} ");
+    }
 }

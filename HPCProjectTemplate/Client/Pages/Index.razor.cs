@@ -44,4 +44,16 @@ public partial class Index
         }
         isVisible = false;
     }
+
+    private async Task RemoveFavoriteMovie(OMDBMovieResponse movie)
+    {
+        var UserAuth = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity;
+        if (UserAuth is not null && UserAuth.IsAuthenticated)
+        {
+            await UserMoviesHttpRepository.RemoveMovie(movie.imdbID, UserAuth.Name);
+            movies.Remove(movie);
+            StateHasChanged();
+            await Task.CompletedTask;
+        }
+    }
 }

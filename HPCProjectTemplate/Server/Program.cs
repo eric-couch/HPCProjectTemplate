@@ -23,7 +23,7 @@ builder.Services.AddIdentityServer()
 builder.Services.AddAuthentication()
     .AddIdentityServerJwt();
 
-builder.Services.AddScoped<IUserService, IUserService>();
+builder.Services.AddScoped<IUserService, UserServices>();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();

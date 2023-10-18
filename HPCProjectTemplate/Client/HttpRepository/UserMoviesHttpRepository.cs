@@ -49,4 +49,15 @@ public class UserMoviesHttpRepository : IUserMoviesHttpRepository
         }
     }
 
+
+   public async Task<bool> RemoveMovie(string imdbId, string userName)
+    {
+        Movie newMovie = new Movie { imdbId = imdbId };
+        var res = await _httpClient.PostAsJsonAsync<Movie>($"api/remove-movie?username={userName}", newMovie);
+        if (!res.IsSuccessStatusCode)
+        {
+            throw new ApplicationException(await res.Content.ReadAsStringAsync());
+        }
+        return true;
+    }
 }
