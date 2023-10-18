@@ -6,6 +6,7 @@ using System.Net.Http.Json;
 using HPCProjectTemplate.Client.HttpRepository;
 using HPCProjectTemplate.Shared.Wrappers;
 using System.Diagnostics;
+using Microsoft.JSInterop;
 
 namespace HPCProjectTemplate.Client.Pages;
 
@@ -17,6 +18,8 @@ public partial class Index
     public HttpClient Http { get; set; } = null!;
     [Inject]
     public IUserMoviesHttpRepository UserMoviesHttpRepository { get; set; } = null!;
+    [Inject]
+    public IJSRuntime JS { get; set; } = null!;
     public UserDto? User { get; set; } = null;
     public List<OMDBMovieResponse> movies { get; set; } = new List<OMDBMovieResponse>();
     public bool isVisible = true;
@@ -50,9 +53,16 @@ public partial class Index
         var UserAuth = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity;
         if (UserAuth is not null && UserAuth.IsAuthenticated)
         {
-            await UserMoviesHttpRepository.RemoveMovie(movie.imdbID, UserAuth.Name);
-            movies.Remove(movie);
-            StateHasChanged();
+            bool confirmed = await JS.InvokeAsync<bool>("confirm", "Are you sure you want to remove that movie?");
+            if (confirmed)
+            {
+                await UserMoviesHttpRepository.RemoveMovie(movie.imdbID, UserAuth.Name);
+                //await JS.InvokeVoidAsync("alert", "Movie was removed");
+                await JS.InvokeVoidAsync("userFeedback", $"Removed {movie.Title} from user favorites.");
+                movies.Remove(movie);
+                StateHasChanged();
+            }
+            
             await Task.CompletedTask;
         }
     }

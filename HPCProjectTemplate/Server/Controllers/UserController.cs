@@ -44,6 +44,7 @@ public class UserController : Controller
     }
 
     [HttpPost("api/remove-movie")]
+    [Authorize(Roles ="Admin")]
     public async Task<ActionResult<bool>> RemoveMovie([FromBody] Movie movie, [FromQuery(Name = "userName")] string userName)
     {
         try
@@ -58,4 +59,5 @@ public class UserController : Controller
             return NotFound();
         }
     }
+
 }

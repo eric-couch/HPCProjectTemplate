@@ -3,12 +3,20 @@
 
 <SfSpinner Visible="@isVisible"></SfSpinner>
 
-@if (movies is not null)
-{
-    <ul>
-    @foreach (HPCProjectTemplate.Shared.OMDBMovieResponse movie in movies)
-    {
-        <MovieDetails Movie=movie OnRemoveFavoriteMovie="RemoveFavoriteMovie" />
-    }
-    </ul>
-}
+<AuthorizeView>
+    <Authorized>
+        @if (movies is not null)
+        {
+            <ul>
+                @foreach (HPCProjectTemplate.Shared.OMDBMovieResponse movie in movies)
+                {
+                    <MovieDetails Movie=movie OnRemoveFavoriteMovie="RemoveFavoriteMovie" />
+                }
+            </ul>
+        }
+    </Authorized>
+    <NotAuthorized>
+        <p>you haven't logged in, please login to view your favortie movies</p>
+    </NotAuthorized>
+</AuthorizeView>
+
