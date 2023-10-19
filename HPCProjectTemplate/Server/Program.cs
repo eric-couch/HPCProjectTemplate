@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using HPCProjectTemplate.Server.Services;
+using HPCProjectTemplate.Server.Factory;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,8 @@ builder.Services.AddIdentityServer()
     .AddApiAuthorization<ApplicationUser, ApplicationDbContext>(options =>
     {
         options.IdentityResources["openid"].UserClaims.Add("role");
+        options.IdentityResources["openid"].UserClaims.Add("FirstName");
+        options.IdentityResources["openid"].UserClaims.Add("LastName");
         options.ApiResources.Single().UserClaims.Add("role");
     });
 
@@ -35,6 +38,7 @@ builder.Services.AddAuthentication(options =>
     .AddIdentityServerJwt();
 
 builder.Services.AddScoped<IUserService, UserServices>();
+builder.Services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, CustomClaimsFactory>();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
