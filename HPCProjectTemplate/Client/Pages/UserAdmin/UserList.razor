@@ -1,0 +1,46 @@
+﻿@page "/admin"
+
+<h3>Users</h3>
+
+<p>
+    <NavLink class="btn btn-primary" href="create-user">Add User</NavLink>
+    <NavLink class="btn btn-primary" href="create-role">Add Role</NavLink>
+    <NavLink class="btn btn-primary" href="manage-role">Manage Roles</NavLink>
+</p>
+
+@if (Users == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Roles</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Users)
+            {
+                <tr>
+                    <td>@user.UserName</td>
+                    <td>
+                        @*@foreach (var role in user.Roles)
+                        {
+                            <span class="primary">@role</span>
+                        }*@
+                        <input type="checkbox" checked="@(user.Roles.Contains("Admin"))" 
+                            @oninput="@(e => UpdateAdmin(e, user.Id))">
+                    </td>
+                    <td>
+                        <NavLink class="btn btn-primary" href="@($"admin/edit-user/{user.Id}")">Edit</NavLink>
+                        <NavLink class="btn btn-primary" href="@($"admin/delete-user/{user.Id}")">Delete</NavLink>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

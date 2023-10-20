@@ -1,0 +1,48 @@
+﻿@page "/admin/edit-user/{userId}"
+
+<h3>Edit User</h3>
+
+<EditForm Model="@UserEditDto" OnValidSubmit="UpdateUser">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="mb-3 mt-3">
+        <label class="form-label">
+            Username:
+        </label>
+        @*this is the equivalent of the Input type="text" in HTML*@
+        <InputText class="form-control" @bind-Value="UserEditDto.UserName" />
+    </div>
+    
+    <div class="mb-3 mt-3">
+        <label class="form-label">
+            Email:
+        </label>
+        <InputText class="form-control" @bind-Value="UserEditDto.Email" />
+    </div>
+    <div class="mb-3 mt-3">
+        <label class="form-check-label">
+            Email Confirmed:
+        </label>
+        <InputCheckbox class="form-check-input" @bind-Value="UserEditDto.EmailConfirmed" />
+    </div>
+    <div class="mb-3 mt-3">
+        <label class="form-check-label">
+            Admin:
+        </label>
+        <InputCheckbox class="form-check-input" @bind-Value="UserEditDto.IsAdmin" />
+    </div>
+    <div class="mb-3 mt-3">
+        <label class="form-label">
+            First Name:
+        </label>
+        <InputText class="form-control" @bind-Value="UserEditDto.FirstName" />
+        <ValidationMessage For="@(() => UserEditDto.FirstName)" />
+    </div>
+    <div class="mb-3 mt-3">
+        <label class="form-check-label">
+            Last Name:
+        </label>
+        <InputText class="form-control" @bind-Value="UserEditDto.LastName" />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>

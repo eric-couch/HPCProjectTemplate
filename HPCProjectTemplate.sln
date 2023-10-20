@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HPCProjectTemplate.Shared",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HPCProjectTemplate.Client.Test", "HPCProjectTemplate.Client.Test\HPCProjectTemplate.Client.Test.csproj", "{F4D532EB-4760-488A-BA4A-BB9826F927A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HPCProjectTemplate.Server.Test", "HPCProjectTemplate.Server.Test\HPCProjectTemplate.Server.Test.csproj", "{C3043C7C-D489-4596-850A-982A3A8BB79F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HPCProjectTemplate.Server.Test", "HPCProjectTemplate.Server.Test\HPCProjectTemplate.Server.Test.csproj", "{C3043C7C-D489-4596-850A-982A3A8BB79F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
