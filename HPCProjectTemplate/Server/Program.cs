@@ -6,8 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using HPCProjectTemplate.Server.Services;
 using HPCProjectTemplate.Server.Factory;
+using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.AddConsole();
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -42,14 +46,26 @@ builder.Services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, CustomC
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+// add swagger gen
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+//app.MapGet("/", () => "Hello, World!");
+app.Logger.LogInformation("log something");
+app.MapGet("/Test", async (ILogger<Program> Logger, HttpResponse response) =>
+{
+    Logger.LogInformation("Testing Logging in Program.cs");
+    await response.WriteAsync("testing");
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
     app.UseWebAssemblyDebugging();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 else
 {

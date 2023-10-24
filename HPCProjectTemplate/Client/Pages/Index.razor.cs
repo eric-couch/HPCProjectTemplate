@@ -7,11 +7,14 @@ using HPCProjectTemplate.Client.HttpRepository;
 using HPCProjectTemplate.Shared.Wrappers;
 using System.Diagnostics;
 using Microsoft.JSInterop;
+using Blazored.LocalStorage;
 
 namespace HPCProjectTemplate.Client.Pages;
 
 public partial class Index
 {
+    [Inject]
+    public ILocalStorageService localStorage { get; set; }
     [Inject]
     public AuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
     [Inject]
@@ -36,6 +39,10 @@ public partial class Index
             if (dataResponse.Success)
             {
                 movies = dataResponse.Data;
+                foreach (var movie in movies)
+                {
+                    await localStorage.SetItemAsync(movie.imdbID, movie.Title);
+                }
                 // log this
                 // show the user a message "success" - this is a toast notification
             } else

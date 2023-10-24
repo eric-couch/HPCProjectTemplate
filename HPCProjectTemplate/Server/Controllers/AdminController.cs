@@ -12,35 +12,58 @@ public class AdminController : Controller
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly ApplicationDbContext _context;
+    private readonly ILogger<AdminController> _logger;
 
     public AdminController( UserManager<ApplicationUser> userManager,
                             RoleManager<IdentityRole> roleManager,
-                            ApplicationDbContext context)
+                            ApplicationDbContext context,
+                            ILogger<AdminController> logger)
     {
         _userManager = userManager;
         _roleManager = roleManager;
         _context = context;
+        _logger = logger;
+
     }
 
     [HttpGet("api/admin")]
     public async Task<List<UserRolesDto>> Get()
     {
-        var users = _userManager.Users.Select(u => new UserRolesDto()
+        try
         {
-            Id = u.Id,
-            UserName = u.UserName,
-            Roles = _userManager.GetRolesAsync(u).Result.ToArray()
-        }).ToList();
-
-        return users;
+            var users = _userManager.Users.Select(u => new UserRolesDto()
+            {
+                Id = u.Id,
+                UserName = u.UserName,
+                Roles = _userManager.GetRolesAsync(u).Result.ToArray()
+            }).ToList();
+            // do not use interpolated string in logging (performance issue)
+            _logger.LogInformation("Getting Users/Roles.");
+            /*  0=Trace
+                1=Debug
+                2=Information
+                3=Warning
+                4=Error
+                5=Critical
+                6=None
+            */
+            return users;
+        } catch (Exception ex)
+        {
+            _logger.LogError("Error in Admin Controller, Get method, Error: {0}", ex.Message);
+            return new List<UserRolesDto>();
+        }
+        
     }
 
     [HttpGet("api/admin/{id}")]
     public async Task<ActionResult<UserEditDto>> Get(string id)
     {
+        _logger.LogInformation("Editing user: {0}", id);
         var user = await _userManager.FindByIdAsync(id);
         if (user == null)
         {
+            _logger.LogError("User {0} not found", id);
             return NotFound();
         }
 
@@ -84,6 +107,7 @@ public class AdminController : Controller
     [HttpPut("api/admin")]
     public async Task<IActionResult> Put([FromBody] UserEditDto userEdit)
     {
+        
         var user = await _userManager.FindByIdAsync(userEdit.Id);
         if (user == null)
         {
